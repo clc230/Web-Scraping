@@ -23,7 +23,7 @@ data = pd.DataFrame(columns=columns)
 
 # loop through all countries using Beautiful Soup and return data
 num = 0
-for start in range(2, 300, 1):
+for start in range(1, 300, 1):
     country_data = []
     page = requests.get('http://www.ffinetwork.org/country_profiles/' + 'country.php?record=' + str(start))
     time.sleep(1)  # ensuring at least 1 second between page grabs
@@ -50,9 +50,10 @@ for start in range(2, 300, 1):
         percent_produced = table2.find_all(name='td', attrs={'id': str(c2)})
         for c in percent_produced:
             country_data.append(c.text)
-    percent_fortified = table2.find_all(name='td', attrs={'id': str(attr3)})
-    for d in percent_fortified:
-        country_data.append(d.text)
+        percent_fortified = table2.find_all(name='td', attrs={'id': str(attr3)})
+        for d in percent_fortified:
+            if item.title() in str(d.parent.text):
+                country_data.append(d.text)
     num += 1
     data.loc[num] = country_data
 
